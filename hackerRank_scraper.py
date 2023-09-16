@@ -22,7 +22,7 @@ browser = webdriver.Firefox(options=options)
 
 
 url = 'https://www.hackerrank.com/contests/astrobyte-preliminary-round/leaderboard'  # Change the url of the contest
-maxPage = 1  # Set the maxPage limit
+maxPage = 14  # Set the maxPage limit
 
 if url[-11:] != "leaderboard":  # If only contest link is given, redirect to leaderboard link
     url = url + "leaderboard"

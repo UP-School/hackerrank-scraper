@@ -92,6 +92,7 @@
                 "sha256:f93fc78fe8bf15afe2b8d6b6499f1c73953169fad1e9a8dd086cdff3190e7fdf"
             ],
             "index": "pypi",
+            "markers": "python_version < '3.13' and python_version >= '3.9'",
             "version": "==1.26.0"
         },
         "outcome": {
@@ -125,6 +126,7 @@
                 "sha256:eb20252720b1cc1b7d0b2879ffc7e0542dd568f24d7c4b2347cb035206936421"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.9'",
             "version": "==2.1.0"
         },
         "pysocks": {
@@ -156,6 +158,7 @@
                 "sha256:b2c48b1440db54a0653300d9955f5421390723d53b36ec835e18de8e13bbd401"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.8'",
             "version": "==4.12.0"
         },
         "six": {
