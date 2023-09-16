@@ -3,6 +3,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 """This code scrapes the leaderboard data of a given HackerRank contest, given contest URL, using selenium webdriver 
 and saves the leaderboard data to a csv file called "hr_leaderboard.csv". It can both scrape ACM type leaderboards as 
@@ -16,10 +17,11 @@ returns hr_leaderboard.csv
 """
 
 options = Options()
-options.headless = True
+options.add_argument('--headless')
 browser = webdriver.Firefox(options=options)
 
-url = 'https://www.hackerrank.com/contests/w38/leaderboard'  # Change the url of the contest
+
+url = 'https://www.hackerrank.com/contests/astrobyte-preliminary-round/leaderboard'  # Change the url of the contest
 maxPage = 14  # Set the maxPage limit
 
 if url[-11:] != "leaderboard":  # If only contest link is given, redirect to leaderboard link
@@ -29,9 +31,9 @@ if url[-11:] != "leaderboard":  # If only contest link is given, redirect to lea
 def getPage(number):  # Return the leaderboard for given page number
     browser.get(url + "/" + str(number))
     browser.implicitly_wait(3)
-    if len(browser.find_elements_by_class_name("acm-leaderboard-cell  ")) > 10:
-        return 1, [x.text for x in browser.find_elements_by_class_name("acm-leaderboard-cell  ")]
-    return 0, [x.text for x in browser.find_elements_by_class_name("leaderboard-list-view")]
+    if len(browser.find_elements(By.CLASS_NAME, 'acm-leaderboard-cell')) > 10:
+        return 1, [x.text for x in browser.find_elements(By.CLASS_NAME, 'acm-leaderboard-cell')]
+    return 0, [x.text for x in browser.find_elements(By.CLASS_NAME, 'leaderboard-list-view')]
 
 
 columnLength = max(int(len(getPage(1)[1]) / 10), int(len(getPage(1)[1]) / 10)) if getPage(1)[0] else len(
@@ -50,7 +52,7 @@ while maxPage + 1 > number:
             pageList = np.array([text.split('\n') for text in pageList])
         if pageList.shape[0] < 10:
             try:
-                browser.find_element_by_link_text(str(number + 1))
+                browser.find_element(By.LINK_TEXT, str(number + 1))
             except NoSuchElementException:
                 leaderboard = np.append(leaderboard, pageList, axis=0)
                 break
@@ -74,7 +76,7 @@ leaderboard.reset_index(drop=True, inplace=True)
 
 leaderboard.rename(columns=lambda x: str(int(x) - 3), inplace=True)
 leaderboard = leaderboard.add_prefix('Q')
-leaderboard.rename(columns={'Q-3': 'rank', 'Q-2': 'user', 'Q-1': 'score', 'Q0': 'time'}, inplace=True)
+leaderboard.rename(columns={'Q-3': 'Rank', 'Q-2': 'User', 'Q-1': 'Score', 'Q0': 'Penalty'}, inplace=True)
 
 if leaderboard.shape[0] < 1:
     print("Could not find a leaderboard with this URL. Please check the URL and try again.")
